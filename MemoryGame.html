@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Matching Game</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for flipping animation */
+        .card {
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        .flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            backface-visibility: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans flex items-center justify-center min-h-screen">
+
+    <!-- Main Container -->
+    <div class="container mx-auto text-center p-5">
+        <h1 class="text-4xl font-bold mb-6 text-yellow-400">Memory Matching Game</h1>
+        <p class="mb-4 text-lg text-gray-300">Match all the cards to win!</p>
+
+        <!-- Game Board -->
+        <div id="game-board" class="grid grid-cols-4 gap-4 max-w-xl mx-auto"></div>
+
+        <!-- Restart Button -->
+        <button id="restart-btn" class="mt-8 px-6 py-3 bg-blue-600 hover:bg-blue-800 text-white font-bold rounded">
+            Restart Game
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        const icons = [
+            "🍕", "🍕", "🎸", "🎸", "🚀", "🚀", "🎮", "🎮",
+            "🎲", "🎲", "🎯", "🎯", "⚽", "⚽", "🚗", "🚗"
+        ];
+
+        const board = document.getElementById("game-board");
+        const restartBtn = document.getElementById("restart-btn");
+
+        let flippedCards = [];
+        let matchedCards = [];
+        let lockBoard = false;
+
+        // Initialize Game
+        function initGame() {
+            // Reset Variables
+            board.innerHTML = "";
+            flippedCards = [];
+            matchedCards = [];
+            lockBoard = false;
+
+            // Shuffle and Create Cards
+            shuffleArray(icons);
+            icons.forEach(icon => createCard(icon));
+        }
+
+        // Create a Card
+        function createCard(icon) {
+            const card = document.createElement("div");
+            card.classList.add("card", "bg-gray-800", "rounded-lg", "cursor-pointer", "relative", "w-24", "h-32", "flex", "justify-center", "items-center");
+
+            card.innerHTML = `
+                <div class="card-inner w-full h-full">
+                    <div class="card-front bg-gray-700 rounded-lg w-full h-full flex items-center justify-center text-4xl text-transparent">
+                        ${icon}
+                    </div>
+                    <div class="card-back bg-yellow-400 rounded-lg w-full h-full flex items-center justify-center text-4xl">
+                        🔒
+                    </div>
+                </div>
+            `;
+
+            // Add Event Listener for Flip
+            card.addEventListener("click", () => flipCard(card, icon));
+            board.appendChild(card);
+        }
+
+        // Handle Card Flip
+        function flipCard(card, icon) {
+            if (lockBoard || card.classList.contains("flipped") || flippedCards.length >= 2) return;
+
+            card.classList.add("flipped");
+            flippedCards.push({ card, icon });
+
+            if (flippedCards.length === 2) {
+                checkMatch();
+            }
+        }
+
+        // Check for Match
+        function checkMatch() {
+            lockBoard = true;
+
+            const [first, second] = flippedCards;
+            if (first.icon === second.icon) {
+                matchedCards.push(first.card, second.card);
+                resetFlippedCards();
+                lockBoard = false;
+
+                // Check Win Condition
+                if (matchedCards.length === icons.length) {
+                    setTimeout(() => alert("🎉 Congratulations! You've matched all cards! 🎉"), 500);
+                }
+            } else {
+                // Unflip Cards if Not a Match
+                setTimeout(() => {
+                    first.card.classList.remove("flipped");
+                    second.card.classList.remove("flipped");
+                    resetFlippedCards();
+                    lockBoard = false;
+                }, 1000);
+            }
+        }
+
+        // Reset Flipped Cards
+        function resetFlippedCards() {
+            flippedCards = [];
+        }
+
+        // Shuffle Array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Restart Game
+        restartBtn.addEventListener("click", initGame);
+
+        // Initialize Game on Load
+        initGame();
+    </script>
+</body>
+</html>

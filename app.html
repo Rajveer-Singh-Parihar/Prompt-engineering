@@ -1,0 +1,136 @@
+from flask import Flask, render_template, jsonify, request
+
+app = Flask(__name__)
+
+# Sample slots data
+slots = [
+    {"time": "9:00 AM - 10:00 AM", "available": True},
+    {"time": "10:00 AM - 11:00 AM", "available": True},
+    {"time": "11:00 AM - 12:00 PM", "available": True},
+    {"time": "1:00 PM - 2:00 PM", "available": True},
+    {"time": "2:00 PM - 3:00 PM", "available": True},
+    {"time": "3:00 PM - 4:00 PM", "available": True},
+    {"time": "4:00 PM - 5:00 PM", "available": True},
+    {"time": "5:00 PM - 6:00 PM", "available": True},
+]
+
+@app.route('/')
+def home():
+    return render_template("index.html")
+
+@app.route('/get_slots', methods=['GET'])
+def get_slots():
+    return jsonify(slots)
+
+@app.route('/book_slot', methods=['POST'])
+def book_slot():
+    data = request.json
+    slot_time = data.get("time")
+
+    for slot in slots:
+        if slot["time"] == slot_time and slot["available"]:
+            slot["available"] = False
+            return jsonify({"success": True, "message": f"Slot '{slot_time}' booked successfully!"})
+    
+    return jsonify({"success": False, "message": "Slot is already booked or does not exist."})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+# index.html
+"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Calendar Scheduling</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #0078d7;
+        }
+        .slot {
+            background-color: #0078d7;
+            color: white;
+            padding: 10px;
+            margin: 10px auto;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .slot.booked {
+            background-color: #888;
+            pointer-events: none;
+        }
+        .slot:hover {
+            background-color: #005fb8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Schedule a Slot</h1>
+        <div id="slots"></div>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        async function fetchSlots() {
+            const response = await fetch('/get_slots');
+            const slots = await response.json();
+            const slotsContainer = document.getElementById('slots');
+            slotsContainer.innerHTML = '';
+            
+            slots.forEach(slot => {
+                const slotDiv = document.createElement('div');
+                slotDiv.className = `slot ${!slot.available ? 'booked' : ''}`;
+                slotDiv.textContent = slot.time;
+                
+                if (slot.available) {
+                    slotDiv.addEventListener('click', () => bookSlot(slot.time));
+                }
+                slotsContainer.appendChild(slotDiv);
+            });
+        }
+
+        async function bookSlot(slotTime) {
+            const response = await fetch('/book_slot', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({time: slotTime})
+            });
+            const result = await response.json();
+            document.getElementById('message').textContent = result.message;
+            fetchSlots();
+        }
+
+        window.onload = fetchSlots;
+    </script>
+</body>
+</html>
+"""

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Portfolio</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+        }
+        /* Header Section */
+        header {
+            background-color: #0078d7;
+            color: white;
+            padding: 20px 0;
+            font-size: 1.5rem;
+        }
+        /* Navigation */
+        nav {
+            margin: 20px 0;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #0078d7;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        /* Sections */
+        section {
+            margin: 50px auto;
+            width: 90%;
+            max-width: 800px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            padding: 20px;
+            transition: 0.3s ease;
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        footer {
+            background-color: #0078d7;
+            color: white;
+            padding: 10px 0;
+            position: relative;
+            width: 100%;
+            bottom: 0;
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Welcome to My Portfolio</h1>
+        <p>Web Developer | Programmer | Data Analyst</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#about">About Me</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- About Me Section -->
+    <section id="about">
+        <h2>About Me</h2>
+        <p>Hello! I am a professional web developer and programmer with a passion for building clean, efficient, and user-friendly websites. I specialize in front-end and back-end development and love turning ideas into reality.</p>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2>Projects</h2>
+        <div class="content">
+            <div class="card">
+                <img src="https://th.bing.com/th/id/OIP.vyLKmKB6MbVvVITe7QlvgwHaFj?w=210&h=181&c=7&r=0&o=5&dpr=1.4&pid=1.7" alt="Project 1">
+                <h3>Project 1</h3>
+                <p>A brief description of Project 1 goes here.</p>
+            </div>
+            <div class="card">
+                <img src="https://th.bing.com/th/id/OIP.avuap56KUPnITaVN4qF6ZwHaEK?w=264&h=180&c=7&r=0&o=5&dpr=1.4&pid=1.7" alt="Project 2">
+                <h3>Project 2</h3>
+                <p>A brief description of Project 2 goes here.</p>
+            </div>
+            <div class="card">
+                <img src="https://th.bing.com/th/id/OIP.l2b8cgNlZZimoIBXO68NOQHaE8?w=234&h=180&c=7&r=0&o=5&dpr=1.4&pid=1.7" alt="Project 3">
+                <h3>Project 3</h3>
+                <p>A brief description of Project 3 goes here.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <h2>Experience</h2>
+        <div class="content">
+            <div class="card">
+                <img src="https://th.bing.com/th/id/OIP.Av0oY41bv9xfg_PZ-VzLiAHaFj?w=209&h=180&c=7&r=0&o=5&dpr=1.4&pid=1.7" alt="Experience 1">
+                <h3>Company Name 1</h3>
+                <p>Role and responsibilities at Company Name 1.</p>
+            </div>
+            <div class="card">
+                <img src="https://th.bing.com/th/id/OIP.Nk90opHxy6_LLR6bw9CNgQHaFj?w=220&h=180&c=7&r=0&o=5&dpr=1.4&pid=1.7" alt="Experience 2">
+                <h3>Company Name 2</h3>
+                <p>Role and responsibilities at Company Name 2.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>Contact Me</h2>
+        <p>Email: <a href="mailto:youremail@example.com">youremail@example.com</a></p>
+        <p>LinkedIn: <a href="#">linkedin.com/in/yourprofile</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 My Portfolio | All Rights Reserved</p>
+    </footer>
+
+    <!-- Optional JavaScript for Future Interactivity -->
+    <script>
+        console.log("Welcome to My Portfolio! Feel free to explore.");
+    </script>
+</body>
+</html>

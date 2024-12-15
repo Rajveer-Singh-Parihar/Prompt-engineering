@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Scheduling App</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #0078d7;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .slot {
+            background-color: #0078d7;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .slot:hover {
+            background-color: #005fb8;
+        }
+        #selectedSlot {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Schedule Your Slot</h1>
+        <p>Select an available time slot to schedule your appointment:</p>
+
+        <!-- Calendar Slots -->
+        <div class="calendar" id="calendar">
+            <!-- Slots will be generated here dynamically -->
+        </div>
+
+        <!-- Selected Slot Display -->
+        <p id="selectedSlot">No slot selected.</p>
+    </div>
+
+    <script>
+        // Slots Data
+        const slots = [
+            "9:00 AM - 10:00 AM",
+            "10:00 AM - 11:00 AM",
+            "11:00 AM - 12:00 PM",
+            "1:00 PM - 2:00 PM",
+            "2:00 PM - 3:00 PM",
+            "3:00 PM - 4:00 PM",
+            "4:00 PM - 5:00 PM",
+            "5:00 PM - 6:00 PM",
+            "6:00 PM - 7:00 PM"
+        ];
+
+        const calendarDiv = document.getElementById("calendar");
+        const selectedSlot = document.getElementById("selectedSlot");
+
+        // Generate Slots Dynamically
+        slots.forEach((slotTime) => {
+            const slotDiv = document.createElement("div");
+            slotDiv.classList.add("slot");
+            slotDiv.textContent = slotTime;
+            slotDiv.addEventListener("click", () => {
+                selectedSlot.textContent = `You selected: ${slotTime}`;
+            });
+            calendarDiv.appendChild(slotDiv);
+        });
+    </script>
+</body>
+</html>

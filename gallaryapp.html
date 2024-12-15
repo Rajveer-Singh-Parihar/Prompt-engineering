@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery with Firebase</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+        }
+        h1 {
+            margin: 20px 0;
+            color: #0078d7;
+        }
+        input {
+            margin-bottom: 20px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px;
+            padding: 20px;
+        }
+        .gallery img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+</head>
+<body>
+    <h1>Image Gallery App</h1>
+    <input type="file" id="fileInput">
+    <button onclick="uploadImage()">Upload Image</button>
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_FIREBASE_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        const firebaseApp = firebase.initializeApp(firebaseConfig);
+        const storage = firebaseApp.storage();
+        const gallery = document.getElementById('gallery');
+
+        function uploadImage() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) return alert("Please select a file!");
+
+            const storageRef = storage.ref(`images/${file.name}`);
+            storageRef.put(file).then((snapshot) => {
+                alert("Image uploaded successfully!");
+                fetchGalleryImages();
+            }).catch((error) => {
+                console.error("Error uploading file: ", error);
+            });
+        }
+
+        function fetchGalleryImages() {
+            gallery.innerHTML = ""; // Clear gallery
+            const storageRef = storage.ref('images');
+
+            storageRef.listAll().then((result) => {
+                result.items.forEach((imageRef) => {
+                    imageRef.getDownloadURL().then((url) => {
+                        const img = document.createElement('img');
+                        img.src = url;
+                        gallery.appendChild(img);
+                    });
+                });
+            }).catch((error) => {
+                console.error("Error loading images: ", error);
+            });
+        }
+
+        // Fetch images on load
+        window.onload = fetchGalleryImages;
+    </script>
+</body>
+</html>

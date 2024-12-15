@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Joke Generator</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+        }
+        h1 {
+            margin-bottom: 15px;
+            font-size: 2rem;
+            color: #0078d7;
+        }
+        p {
+            margin: 20px 0;
+            font-size: 1.2rem;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background-color: #005fb8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Joke Generator</h1>
+        <input type="text" id="userInput" placeholder="Enter a topic for the joke" />
+        <button id="getJoke">Get a Joke</button>
+        <p id="jokeOutput">Your joke will appear here...</p>
+    </div>
+
+    <script>
+        const getJokeButton = document.getElementById("getJoke");
+        const jokeOutput = document.getElementById("jokeOutput");
+        const userInput = document.getElementById("userInput");
+
+        // Replace with your OpenAI API key
+        const API_KEY = "YOUR_OPENAI_API_KEY";
+
+        async function fetchJokeFromAI() {
+            const inputText = userInput.value;
+            if (!inputText) {
+                jokeOutput.textContent = "Please enter a topic to generate a joke!";
+                return;
+            }
+            jokeOutput.textContent = "Generating joke... Please wait!";
+
+            try {
+                const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [
+                            { role: "system", content: "You are a funny assistant that generates jokes." },
+                            { role: "user", content: `Tell me a joke about ${inputText}.` }
+                        ],
+                        max_tokens: 50
+                    })
+                });
+
+                const data = await response.json();
+                const joke = data.choices[0]?.message?.content || "Sorry, I couldn't fetch a joke. Try again!";
+                jokeOutput.textContent = joke;
+            } catch (error) {
+                console.error("Error fetching joke:", error);
+                jokeOutput.textContent = "Oops! Something went wrong. Please try again.";
+            }
+        }
+
+        getJokeButton.addEventListener("click", fetchJokeFromAI);
+    </script>
+</body>
+</html>

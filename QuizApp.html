@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .quiz-container {
+            margin: 20px 0;
+        }
+
+        .question {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .options button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .options button:hover {
+            background: #45a049;
+        }
+
+        .score {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .restart {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .restart:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JavaScript Quiz App</h1>
+        <div class="quiz-container" id="quiz-container">
+            <div class="question" id="question">Question text</div>
+            <div class="options" id="options"></div>
+        </div>
+        <div class="score" id="score" style="display:none;"></div>
+        <button id="restart" class="restart" style="display:none;" onclick="restartQuiz()">Restart Quiz</button>
+    </div>
+
+    <script>
+        // Questions Array
+        const questions = [
+            {
+                question: "What is the capital of France?",
+                options: ["Paris", "London", "Berlin", "Madrid"],
+                answer: "Paris"
+            },
+            {
+                question: "Which language is used for web apps?",
+                options: ["Python", "C++", "JavaScript", "Java"],
+                answer: "JavaScript"
+            },
+            {
+                question: "What does CSS stand for?",
+                options: ["Creative Style Sheets", "Cascading Style Sheets", "Colorful Style Sheets", "Computer Style Sheets"],
+                answer: "Cascading Style Sheets"
+            },
+            {
+                question: "Which is not a JavaScript framework?",
+                options: ["React", "Angular", "Vue", "Django"],
+                answer: "Django"
+            },
+            {
+                question: "Which symbol is used for comments in JavaScript?",
+                options: ["//", "<!-- -->", "#", "/* */"],
+                answer: "//"
+            }
+        ];
+
+        // Variables
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionElement = document.getElementById("question");
+        const optionsElement = document.getElementById("options");
+        const scoreElement = document.getElementById("score");
+        const restartButton = document.getElementById("restart");
+
+        // Initialize Quiz
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreElement.style.display = "none";
+            restartButton.style.display = "none";
+            showQuestion();
+        }
+
+        // Display Current Question
+        function showQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+
+            // Clear previous options
+            optionsElement.innerHTML = "";
+
+            // Render options
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => selectAnswer(option);
+                optionsElement.appendChild(button);
+            });
+        }
+
+        // Handle Answer Selection
+        function selectAnswer(selectedOption) {
+            const correctAnswer = questions[currentQuestionIndex].answer;
+            if (selectedOption === correctAnswer) {
+                score++;
+            }
+
+            // Move to next question
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showScore();
+            }
+        }
+
+        // Display Final Score
+        function showScore() {
+            questionElement.textContent = "Quiz Completed!";
+            optionsElement.innerHTML = "";
+            scoreElement.textContent = `Your Score: ${score} / ${questions.length}`;
+            scoreElement.style.display = "block";
+            restartButton.style.display = "inline-block";
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            startQuiz();
+        }
+
+        // Start the Quiz on Load
+        startQuiz();
+    </script>
+</body>
+</html>
